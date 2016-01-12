@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="alunomelhormedia.aspx.cs" Inherits="m6_alunos_t2.alunomelhormedia" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="alunosmelhorquemedia.aspx.cs" Inherits="m6_alunos_t2.alunosmelhorquemedia" %>
 
 <!DOCTYPE html>
 
@@ -60,38 +60,13 @@
     </nav>
     <!--Menu-->
     
-        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:m6_bd_alunos_t2ConnectionString %>" SelectCommand="SELECT TOP (1) alunos.nome, AVG(Notas.nota) AS Media FROM alunos INNER JOIN Notas ON alunos.nprocesso = Notas.nprocesso GROUP BY alunos.nprocesso, alunos.nome ORDER BY Media DESC"></asp:SqlDataSource>
-        <asp:FormView ID="FormView1" runat="server" DataSourceID="SqlDataSource1">
-            <EditItemTemplate>
-                nome:
-                <asp:TextBox ID="nomeTextBox" runat="server" Text='<%# Bind("nome") %>' />
-                <br />
-                Media:
-                <asp:TextBox ID="MediaTextBox" runat="server" Text='<%# Bind("Media") %>' />
-                <br />
-                <asp:LinkButton ID="UpdateButton" runat="server" CausesValidation="True" CommandName="Update" Text="Update" />
-                &nbsp;<asp:LinkButton ID="UpdateCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" />
-            </EditItemTemplate>
-            <InsertItemTemplate>
-                nome:
-                <asp:TextBox ID="nomeTextBox" runat="server" Text='<%# Bind("nome") %>' />
-                <br />
-                Media:
-                <asp:TextBox ID="MediaTextBox" runat="server" Text='<%# Bind("Media") %>' />
-                <br />
-                <asp:LinkButton ID="InsertButton" runat="server" CausesValidation="True" CommandName="Insert" Text="Insert" />
-                &nbsp;<asp:LinkButton ID="InsertCancelButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" />
-            </InsertItemTemplate>
-            <ItemTemplate>
-                nome:
-                <asp:Label ID="nomeLabel" runat="server" Text='<%# Bind("nome") %>' />
-                <br />
-                Media:
-                <asp:Label ID="MediaLabel" runat="server" Text='<%# Bind("Media") %>' />
-                <br />
-
-            </ItemTemplate>
-        </asp:FormView>
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:m6_bd_alunos_t2ConnectionString %>" SelectCommand="SELECT Alunos.nome, AVG(Notas.nota) AS Media FROM Alunos INNER JOIN Notas ON Alunos.nprocesso = Notas.nprocesso GROUP BY Alunos.nprocesso, Alunos.nome HAVING (AVG(Notas.nota) &gt; (SELECT AVG(nota) AS Expr1 FROM Notas AS Notas_1))"></asp:SqlDataSource>
+        <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource1" CssClass="table">
+            <Columns>
+                <asp:BoundField DataField="nome" HeaderText="nome" SortExpression="nome" />
+                <asp:BoundField DataField="Media" HeaderText="Media" ReadOnly="True" SortExpression="Media" />
+            </Columns>
+        </asp:GridView>
     
     </div>
     </form>
